@@ -1,23 +1,19 @@
 from .base import *
-import os, dj_database_url
+import os
 
 DEBUG = False
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "")
-if DATABASE_URL:
-    DATABASES = {
-        "default": dj_database_url.parse(
-            DATABASE_URL, conn_max_age=600, ssl_require=False
-        )
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME":     os.environ.get("PGDATABASE", "railway"),
+        "USER":     os.environ.get("PGUSER", "postgres"),
+        "PASSWORD": os.environ.get("PGPASSWORD", ""),
+        "HOST":     os.environ.get("PGHOST", ""),
+        "PORT":     os.environ.get("PGPORT", "5432"),
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "/tmp/fallback.db",
-        }
-    }
+}
 
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
